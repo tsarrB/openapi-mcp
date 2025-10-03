@@ -2,12 +2,12 @@ import { z } from "zod";
 
 const ENV_SCHEMA = z.object({
   ASYNCAPI_JSON_SOURCE: z.enum(["endpoint", "path"]).default("endpoint"),
-  ASYNCAPI_JSON_ENDPOINT: z.string(),
-  ASYNCAPI_JSON_PATH: z.string(),
+  ASYNCAPI_JSON_ENDPOINT: z.string().optional(),
+  ASYNCAPI_JSON_PATH: z.string().optional(),
 
   OPENAPI_JSON_SOURCE: z.enum(["endpoint", "path"]).default("endpoint"),
-  OPENAPI_JSON_ENDPOINT: z.string(),
-  OPENAPI_JSON_PATH: z.string(),
+  OPENAPI_JSON_ENDPOINT: z.string().optional(),
+  OPENAPI_JSON_PATH: z.string().optional(),
 
   LOG_LEVEL: z
     .enum(["fatal", "error", "warn", "info", "debug", "trace"])
