@@ -1,17 +1,57 @@
 {
-  "name": "openapi-mcp",
+  "name": "@tsarr/openapi-mcp",
   "version": "1.0.0",
+  "description": "Model Context Protocol (MCP) server that exposes helpful tools for exploring an OpenAPI specification",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tsarrB/openapi-mcp.git"
+  },
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "openapi",
+    "swagger",
+    "api",
+    "rest",
+    "server",
+    "ai-connector",
+    "external-tools",
+    "API connector",
+    "API explorer",
+    "claude",
+    "anthropic",
+    "ai",
+    "cursor"
+  ],
+  "types": "./build/index.d.ts",
+  "main": "./build/index.js",
   "bin": {
     "openapi-mcp": "./build/index.js"
   },
+  "files": [
+    "build/**/*",
+    "README.md",
+    "LICENSE"
+  ],
   "scripts": {
+    "prepublishOnly": "npm run build",
     "pretest": "npm run build",
     "build": "tsc",
     "dev": "tsc --watch",
-    "start": "node build/index.js"
+    "start": "node build/index.js",
+    "whoami": "npm whoami",
+    "npm:publish": "npm publish --access public",
+    "build:publish": "npm run build && npm run npm:publish"
   },
   "author": "bogdan.tsarik@gmail.com",
   "license": "ISC",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/",
+    "access": "public"
+  },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.18.0",
     "es-toolkit": "^1.39.10",
@@ -23,6 +63,5 @@
   "devDependencies": {
     "@types/node": "^22.18.4",
     "typescript": "^5.9.2"
-  },
-  "description": ""
+  }
 }
