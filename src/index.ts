@@ -4,14 +4,27 @@ import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 
 import { registerOpenapiTools } from "./modules/openapi";
+import { registerAsyncapiTools } from "./modules/asyncapi";
 import { logger } from "./services/logger";
+import {
+  isAsyncapiEndpointConfigured,
+  isAsyncapiJsonPathConfigured,
+  isOpenapiEndpointConfigured,
+  isOpenapiJsonPathConfigured,
+} from "./config";
 
 const server = new McpServer({
   name: "openapi-mcp",
   version: "1.0.0",
 });
 
-registerOpenapiTools(server);
+if (isOpenapiJsonPathConfigured || isOpenapiEndpointConfigured) {
+  registerOpenapiTools(server);
+}
+
+if (isAsyncapiJsonPathConfigured || isAsyncapiEndpointConfigured) {
+  registerAsyncapiTools(server);
+}
 
 async function main() {
   try {

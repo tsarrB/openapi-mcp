@@ -25,10 +25,6 @@ export interface OpenapiJson {
 }
 
 export const getOpenapiJson = async (): Promise<OpenapiJson> => {
-  if (!isOpenapiJsonPathConfigured && !isOpenapiEndpointConfigured) {
-    throw new Error("OPENAPI_JSON_ENDPOINT or OPENAPI_JSON_PATH is not configured");
-  }
-
   if (isOpenapiJsonPathConfigured) {
     try {
       const response = fs.readFileSync(config.OPENAPI_JSON_PATH, "utf8");

@@ -1,6 +1,10 @@
 import { z } from "zod";
 
 const ENV_SCHEMA = z.object({
+  ASYNCAPI_JSON_SOURCE: z.enum(["endpoint", "path"]).default("endpoint"),
+  ASYNCAPI_JSON_ENDPOINT: z.string(),
+  ASYNCAPI_JSON_PATH: z.string(),
+
   OPENAPI_JSON_SOURCE: z.enum(["endpoint", "path"]).default("endpoint"),
   OPENAPI_JSON_ENDPOINT: z.string(),
   OPENAPI_JSON_PATH: z.string(),
@@ -25,6 +29,14 @@ export const parseEnv = (env: NodeJS.ProcessEnv = process.env) => {
   return result.data;
 };
 
+const getIsAsyncapiEndpointConfigured = (env: ReturnType<typeof parseEnv>) => {
+  return env.ASYNCAPI_JSON_ENDPOINT && env.ASYNCAPI_JSON_SOURCE === "endpoint";
+};
+
+const getIsAsyncapiJsonPathConfigured = (env: ReturnType<typeof parseEnv>) => {
+  return env.ASYNCAPI_JSON_PATH && env.ASYNCAPI_JSON_SOURCE === "path";
+};
+
 const getIsOpenapiEndpointConfigured = (env: ReturnType<typeof parseEnv>) => {
   return env.OPENAPI_JSON_ENDPOINT && env.OPENAPI_JSON_SOURCE === "endpoint";
 };
@@ -35,5 +47,7 @@ const getIsOpenapiJsonPathConfigured = (env: ReturnType<typeof parseEnv>) => {
 
 export const config = parseEnv();
 
+export const isAsyncapiEndpointConfigured = getIsAsyncapiEndpointConfigured(config);
+export const isAsyncapiJsonPathConfigured = getIsAsyncapiJsonPathConfigured(config);
 export const isOpenapiEndpointConfigured = getIsOpenapiEndpointConfigured(config);
 export const isOpenapiJsonPathConfigured = getIsOpenapiJsonPathConfigured(config);

@@ -50,7 +50,9 @@ export const registerOpenapiTools = (server: McpServer) => {
         Object.entries(paths).forEach(([path, methods]) => {
           Object.entries(methods).forEach(([method, operation]) => {
             operation.tags.forEach((tag) => {
-              const tagsNamesNormalized = tagsNames.map((name) => name.toLowerCase());
+              const tagsNamesNormalized = tagsNames.map((name) =>
+                name.toLowerCase()
+              );
 
               if (tagsNamesNormalized.includes(tag.toLowerCase())) {
                 modulePaths[path] = modulePaths[path] || {};
@@ -75,7 +77,57 @@ export const registerOpenapiTools = (server: McpServer) => {
   );
 
   server.registerTool(
-    "openapi.getSecuritySchemesByTagsNames",
+    "openapi.getAllEndpoints",
+    {
+      title: "Get All Endpoints",
+      description: "Return the all endpoints.",
+    },
+    async () => {
+      try {
+        const { paths } = await getOpenapiJson();
+
+        return buildSuccessResult(
+          "All endpoints fetched: ",
+          Object.keys(paths)
+        );
+      } catch (error) {
+        return buildErrorResult("Unable to fetch all endpoints", error);
+      }
+    }
+  );
+
+  server.registerTool(
+    "openapi.getEndpointMethodsByPath",
+    {
+      title: "Get Endpoint Methods By Path",
+      description: "Return the endpoint methods by path.",
+      inputSchema: {
+        endpoint: z
+          .string()
+          .min(1)
+          .describe("Path for fetching methods"),
+      },
+    },
+    async ({ endpoint }) => {
+      try {
+        const { paths } = await getOpenapiJson();
+
+        if (!paths[endpoint]) {
+          throw new Error(`Endpoint ${endpoint} not found`);
+        }
+
+        return buildSuccessResult(
+          "Endpoint methods by path fetched: ",
+          paths[endpoint]
+        );
+      } catch (error) {
+        return buildErrorResult("Unable to fetch endpoint methods by path", error);
+      }
+    }
+  );
+
+  server.registerTool(
+    "openapi.getSecuritySchemesByNames",
     {
       title: "Get Security Schemes by security names",
       description: "Return the security schemes by security names.",
@@ -96,7 +148,9 @@ export const registerOpenapiTools = (server: McpServer) => {
 
         Object.entries(securitySchemes).forEach(
           ([securityName, securityScheme]) => {
-            const securityNamesNormalized = securityNames.map((name) => name.toLowerCase());
+            const securityNamesNormalized = securityNames.map((name) =>
+              name.toLowerCase()
+            );
 
             if (securityNamesNormalized.includes(securityName.toLowerCase())) {
               result[securityName] = securityScheme;
@@ -135,10 +189,12 @@ export const registerOpenapiTools = (server: McpServer) => {
           components: { schemas },
         } = await getOpenapiJson();
 
-        const result: OpenapiJson["components"]["securitySchemes"] = {};
+        const result: OpenapiJson["components"]["schemas"] = {};
 
         Object.entries(schemas).forEach(([name, schema]) => {
-          const normalizedNames = schemaNames.map((name) => name.split('/').pop()?.toLowerCase());
+          const normalizedNames = schemaNames.map((name) =>
+            name.split("/").pop()?.toLowerCase()
+          );
 
           if (normalizedNames.includes(name.toLowerCase())) {
             result[name] = schema;
@@ -146,12 +202,12 @@ export const registerOpenapiTools = (server: McpServer) => {
         });
 
         return buildSuccessResult(
-          "Security schemes by security names fetched: ",
+          "Schemas by names fetched: ",
           result
         );
       } catch (error) {
         return buildErrorResult(
-          "Unable to fetch security schemes by security names",
+          "Unable to fetch schemas by names",
           error
         );
       }

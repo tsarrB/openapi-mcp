@@ -41,7 +41,8 @@
     "start": "node build/index.js",
     "whoami": "npm whoami",
     "npm:publish": "npm publish --access public",
-    "build:publish": "npm run build && npm run npm:publish"
+    "build:publish": "npm run build && npm run npm:publish",
+    "start:debug": "npx @modelcontextprotocol/inspector node --env-file=.env build/index.js"
   },
   "author": "bogdan.tsarik@gmail.com",
   "license": "ISC",
