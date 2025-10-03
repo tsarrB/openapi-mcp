@@ -10,7 +10,29 @@ Model Context Protocol (MCP) server that exposes helpful tools for exploring an 
 - Structured logging with configurable destination and verbosity
 
 ## How install
-TODO: add how to use
+Add to your `mcpServers` section in `mcp.json` file:
+
+```json
+{
+  "mcpServers": {
+    "openapi-mcp": {
+      "command": "npx",
+      "args": ["-y", "@tsarr/openapi-mcp"],
+      "env": {
+        "OPENAPI_JSON_SOURCE": "endpoint",
+        "OPENAPI_JSON_ENDPOINT": "{OPTIONAL_PATH_TO_YOUR_OPENAPI_ENDPOINT}",
+        "OPENAPI_JSON_PATH": "{OPTIONAL_PATH_TO_YOUR_OPENAPI_JSON_FILE}",
+
+        "ASYNCAPI_JSON_SOURCE": "endpoint",
+        "ASYNCAPI_JSON_ENDPOINT": "{OPTIONAL_PATH_TO_YOUR_ASYNCAPI_ENDPOINT}",
+        "ASYNCAPI_JSON_PATH": "{OPTIONAL_PATH_TO_YOUR_ASYNCAPI_JSON_FILE}"
+      }
+    }
+  }
+}
+```
+
+You can choose to fetch the OpenAPI or AsyncAPI JSON from an HTTP endpoint or from a local JSON file.
 
 ## Problems and solutions
 TODO: add problems and solutions
