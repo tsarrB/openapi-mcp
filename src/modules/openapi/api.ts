@@ -27,7 +27,7 @@ export interface OpenapiJson {
 export const getOpenapiJson = async (): Promise<OpenapiJson> => {
   if (isOpenapiJsonPathConfigured) {
     try {
-      const response = fs.readFileSync(config.OPENAPI_JSON_PATH, "utf8");
+      const response = fs.readFileSync(config.OPENAPI_JSON_PATH!, "utf8");
 
       if (JSON.parse(response).openapi) {
         return JSON.parse(response);
@@ -39,7 +39,7 @@ export const getOpenapiJson = async (): Promise<OpenapiJson> => {
     }
   } else {
     try {
-      const response = await ofetch(config.OPENAPI_JSON_ENDPOINT);
+      const response = await ofetch(config.OPENAPI_JSON_ENDPOINT!);
 
       logger.info({ response }, "OpenAPI JSON response");
   

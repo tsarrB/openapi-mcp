@@ -33,7 +33,7 @@ export interface AsyncapiJson {
 export const getAsyncapiJson = async (): Promise<AsyncapiJson> => {
   if (isAsyncapiJsonPathConfigured) {
     try {
-      const response = fs.readFileSync(config.ASYNCAPI_JSON_PATH, "utf8");
+      const response = fs.readFileSync(config.ASYNCAPI_JSON_PATH!, "utf8");
 
       if (JSON.parse(response).asyncapi) {
         return JSON.parse(response);
@@ -45,7 +45,7 @@ export const getAsyncapiJson = async (): Promise<AsyncapiJson> => {
     }
   } else {
     try {
-      const response = await ofetch(config.ASYNCAPI_JSON_ENDPOINT);
+      const response = await ofetch(config.ASYNCAPI_JSON_ENDPOINT!);
 
       logger.info({ response }, "AsyncAPI JSON response");
   
