@@ -8,7 +8,7 @@ import { logger } from "../../services/logger";
 
 export const registerOpenapiTools = (server: McpServer) => {
   server.registerTool(
-    "openapi.getApiInfo",
+    "openapi_getApiInfo",
     {
       title: "Get API Info",
       description: "Return the API info.",
@@ -30,7 +30,7 @@ export const registerOpenapiTools = (server: McpServer) => {
   );
 
   server.registerTool(
-    "openapi.getEndpointsByTagsNames",
+    "openapi_getEndpointsByTagsNames",
     {
       title: "Get Endpoints by tags names",
       description: "Return the endpoints by tags names.",
@@ -77,7 +77,7 @@ export const registerOpenapiTools = (server: McpServer) => {
   );
 
   server.registerTool(
-    "openapi.getAllEndpoints",
+    "openapi_getAllEndpoints",
     {
       title: "Get All Endpoints",
       description: "Return the all endpoints.",
@@ -97,15 +97,12 @@ export const registerOpenapiTools = (server: McpServer) => {
   );
 
   server.registerTool(
-    "openapi.getEndpointMethodsByPath",
+    "openapi_getEndpointMethodsByPath",
     {
       title: "Get Endpoint Methods By Path",
       description: "Return the endpoint methods by path.",
       inputSchema: {
-        endpoint: z
-          .string()
-          .min(1)
-          .describe("Path for fetching methods"),
+        endpoint: z.string().min(1).describe("Path for fetching methods"),
       },
     },
     async ({ endpoint }) => {
@@ -121,13 +118,16 @@ export const registerOpenapiTools = (server: McpServer) => {
           paths[endpoint]
         );
       } catch (error) {
-        return buildErrorResult("Unable to fetch endpoint methods by path", error);
+        return buildErrorResult(
+          "Unable to fetch endpoint methods by path",
+          error
+        );
       }
     }
   );
 
   server.registerTool(
-    "openapi.getSecuritySchemesByNames",
+    "openapi_getSecuritySchemesByNames",
     {
       title: "Get Security Schemes by security names",
       description: "Return the security schemes by security names.",
@@ -172,7 +172,7 @@ export const registerOpenapiTools = (server: McpServer) => {
   );
 
   server.registerTool(
-    "openapi.getSchemasByNames",
+    "openapi_getSchemasByNames",
     {
       title: "Get Schemas by names",
       description: "Return the schemas by names.",
@@ -201,15 +201,9 @@ export const registerOpenapiTools = (server: McpServer) => {
           }
         });
 
-        return buildSuccessResult(
-          "Schemas by names fetched: ",
-          result
-        );
+        return buildSuccessResult("Schemas by names fetched: ", result);
       } catch (error) {
-        return buildErrorResult(
-          "Unable to fetch schemas by names",
-          error
-        );
+        return buildErrorResult("Unable to fetch schemas by names", error);
       }
     }
   );

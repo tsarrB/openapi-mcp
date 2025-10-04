@@ -8,7 +8,7 @@ import { logger } from "../../services/logger";
 
 export const registerAsyncapiTools = (server: McpServer) => {
   server.registerTool(
-    "asyncapi.getApiInfo",
+    "asyncapi_getApiInfo",
     {
       title: "Get API Info",
       description: "Return the API info.",
@@ -19,7 +19,13 @@ export const registerAsyncapiTools = (server: McpServer) => {
 
         return buildSuccessResult(
           "Basic API info fetched: ",
-          pick(asyncapiJson, ["asyncapi", "info", "servers", "tags", "defaultContentType"])
+          pick(asyncapiJson, [
+            "asyncapi",
+            "info",
+            "servers",
+            "tags",
+            "defaultContentType",
+          ])
         );
       } catch (error) {
         logger.error({ err: error }, "Unable to fetch API info");
@@ -29,9 +35,8 @@ export const registerAsyncapiTools = (server: McpServer) => {
     }
   );
 
-
   server.registerTool(
-    "asyncapi.getAllChannels",
+    "asyncapi_getAllChannels",
     {
       title: "Get All Channels",
       description: "Return the all channels.",
@@ -50,17 +55,13 @@ export const registerAsyncapiTools = (server: McpServer) => {
     }
   );
 
-
   server.registerTool(
-    "asyncapi.getChannelInfo",
+    "asyncapi_getChannelInfo",
     {
       title: "Get Channel Info",
       description: "Return the channel info.",
       inputSchema: {
-        channel: z
-          .string()
-          .min(1)
-          .describe("Channel for fetching info"),
+        channel: z.string().min(1).describe("Channel for fetching info"),
       },
     },
     async ({ channel }) => {
@@ -71,10 +72,7 @@ export const registerAsyncapiTools = (server: McpServer) => {
           throw new Error(`Channel ${channel} not found`);
         }
 
-        return buildSuccessResult(
-          "Channel info fetched: ",
-          channels[channel]
-        );
+        return buildSuccessResult("Channel info fetched: ", channels[channel]);
       } catch (error) {
         return buildErrorResult("Unable to fetch channel info", error);
       }
@@ -82,7 +80,7 @@ export const registerAsyncapiTools = (server: McpServer) => {
   );
 
   server.registerTool(
-    "asyncapi.getSchemasByNames",
+    "asyncapi_getSchemasByNames",
     {
       title: "Get schemas by names",
       description: "Return the schemas by names.",
@@ -102,22 +100,18 @@ export const registerAsyncapiTools = (server: McpServer) => {
         const result: AsyncapiJson["components"]["schemas"] = {};
 
         Object.entries(schemas).forEach(([name, schema]) => {
-          const normalizedNames = schemaNames.map((name) => name.split('/').pop()?.toLowerCase());
+          const normalizedNames = schemaNames.map((name) =>
+            name.split("/").pop()?.toLowerCase()
+          );
 
           if (normalizedNames.includes(name.toLowerCase())) {
             result[name] = schema;
           }
         });
 
-        return buildSuccessResult(
-          "Schemas by names fetched: ",
-          result
-        );
+        return buildSuccessResult("Schemas by names fetched: ", result);
       } catch (error) {
-        return buildErrorResult(
-          "Unable to fetch schemas by names",
-          error
-        );
+        return buildErrorResult("Unable to fetch schemas by names", error);
       }
     }
   );
