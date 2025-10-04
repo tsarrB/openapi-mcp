@@ -54,7 +54,7 @@
     "access": "public"
   },
   "dependencies": {
-    "@modelcontextprotocol/sdk": "^1.18.0",
+    "@modelcontextprotocol/sdk": "^1.19.1",
     "es-toolkit": "^1.39.10",
     "ofetch": "^1.4.1",
     "pino": "^9.13.1",

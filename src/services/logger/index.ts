@@ -5,9 +5,7 @@ import pretty from "pino-pretty";
 
 import { config } from "../../config";
 
-const resolveDestination = () => {
-  const destination = config.LOG_DESTINATION;
-
+const resolveDestination = (destination: string) => {
   if (destination === "stdout") {
     return 1;
   }
@@ -18,26 +16,32 @@ const resolveDestination = () => {
   return destination;
 };
 
-const prettyStream = pretty({
-  destination: resolveDestination(),
-  ignore: "pid,hostname",
-  customColors:
-    "fatal:red,error:red,core:magenta,coreDebug:blue,request:cyan,info:green,debug:black,plugin:white,warn:yellow",
-});
+const getAppLogger = () => {
+  if (config.LOG_DESTINATION && config.LOG_LEVEL) {
+    const prettyStream = pretty({
+      destination: resolveDestination(config.LOG_DESTINATION),
+      ignore: "pid,hostname",
+      customColors:
+        "fatal:red,error:red,core:magenta,coreDebug:blue,request:cyan,info:green,debug:black,plugin:white,warn:yellow",
+    });
 
-const appLogger = pino(
-  {
-    level: config.LOG_LEVEL,
-  },
-  prettyStream
-);
+    const appLogger = pino(
+      {
+        level: config.LOG_LEVEL,
+      },
+      prettyStream
+    );
 
-const mockLogger = {
-  error: () => {},
-  info: () => {},
-  warn: () => {},
-  debug: () => {},
-  trace: () => {},
+    return appLogger;
+  }
+
+  return {
+    error: () => {},
+    info: () => {},
+    warn: () => {},
+    debug: () => {},
+    trace: () => {},
+  };
 };
 
-export const logger = config.LOG_DESTINATION && config.LOG_LEVEL ? appLogger : mockLogger;
+export const logger = getAppLogger();

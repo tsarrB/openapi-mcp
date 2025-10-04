@@ -12,7 +12,7 @@ const ENV_SCHEMA = z.object({
   LOG_LEVEL: z
     .enum(["fatal", "error", "warn", "info", "debug", "trace"])
     .default("info"),
-  LOG_DESTINATION: z.string().default(".logs/app.log"),
+  LOG_DESTINATION: z.string().optional(),
 });
 
 export const parseEnv = (env: NodeJS.ProcessEnv = process.env) => {
@@ -47,7 +47,11 @@ const getIsOpenapiJsonPathConfigured = (env: ReturnType<typeof parseEnv>) => {
 
 export const config = parseEnv();
 
-export const isAsyncapiEndpointConfigured = getIsAsyncapiEndpointConfigured(config);
-export const isAsyncapiJsonPathConfigured = getIsAsyncapiJsonPathConfigured(config);
-export const isOpenapiEndpointConfigured = getIsOpenapiEndpointConfigured(config);
-export const isOpenapiJsonPathConfigured = getIsOpenapiJsonPathConfigured(config);
+export const isAsyncapiEndpointConfigured =
+  getIsAsyncapiEndpointConfigured(config);
+export const isAsyncapiJsonPathConfigured =
+  getIsAsyncapiJsonPathConfigured(config);
+export const isOpenapiEndpointConfigured =
+  getIsOpenapiEndpointConfigured(config);
+export const isOpenapiJsonPathConfigured =
+  getIsOpenapiJsonPathConfigured(config);
